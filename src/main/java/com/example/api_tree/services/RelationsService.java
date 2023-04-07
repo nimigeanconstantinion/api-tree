@@ -71,6 +71,14 @@ public class RelationsService {
         return dt;
     }
 
+    public TreeNode getNodgetOrigin(long id){
+        SourceData data=relationsRepo.getParinteByID(id).get();
+        DTOSourceData dtoData=toDTO(data);
+        return toNode(dtoData,0);
+
+
+    }
+
     public List<TreeNode> getTree(TreeNode origin) {
         List<TreeNode> allLev = new ArrayList<>();
         List<TreeNode> level = new ArrayList<>();
