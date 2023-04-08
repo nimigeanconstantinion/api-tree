@@ -7,7 +7,6 @@ import com.example.api_tree.services.RelationsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +40,6 @@ public class RelationController {
                     return relationsService.toNode(t,1);
                 }).collect(Collectors.toList());
 
-        System.out.println("______Lista de marime "+lista.size());
        return lista;
     }
 
@@ -49,18 +47,17 @@ public class RelationController {
     @GetMapping("/tree")
     public List<TreeNode> getTree() {
 
-        SourceData root=new SourceData();
-        root.setIdSource(0L);
-        root.setLabel("ROOT");
-        root.setQnt(0);
-        root.setFel("R");
-        root.setDescriere("Seful");
+        TreeNode root=relationsService.getTreeOrigin(0L);
 
-        DTOSourceData dtoorigin=relationsService.toDTO(root);
-        TreeNode tnode=relationsService.toNode(dtoorigin,0);
-        return relationsService.getTree(tnode);
+        return relationsService.getTree(root);
     }
 
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/test")
+    public List<SourceData> getTest() {
+
+        return relationsRepo.getAllChildrenByIDParinte(2L);
+    }
 
     }

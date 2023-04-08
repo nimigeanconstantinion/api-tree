@@ -14,16 +14,17 @@ import java.util.Optional;
 @Repository
 public interface RelationsRepo extends JpaRepository<Relatii,Long> {
 
-    @Query(value = "select a.source1 from Relatii a where a.source1.idSource=?1")
+    @Query(value = "select a.source1 from Relatii a where a.source2.idSource=?1")
     Optional<SourceData> getParinteByID(Long idS);
 
     @Query(value = "select a.source2 from Relatii a where a.source2.idSource=?1")
     Optional<SourceData> getChildByID(Long idS);
 
-
+    @Query(value = "select a.source1 from Relatii a where a.source1.idSource=?1")
+    Optional<SourceData> getOrigin(Long idR);
 
     @Query(value = "select a from CustomField a where a.idOwner=?1")
-    List<CustomField> getCustomFieldyID(Long idS);
+    List<CustomField> getCustomFieldByID(Long idS);
 
     @Query(value = "select a.source1 from Relatii a where a.source2.idSource=?1")
     Optional<SourceData> getParentOfChildByID(Long idC);

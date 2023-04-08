@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,12 +20,12 @@ public class RelationsService {
         this.customFieldsRepo = customFieldsRepo;
     }
 
-    public List<DTOSourceData> getAllChildrenOf(Long id){
-        return relationsRepo.getAllChildrenByIDParinte(id)
+    public List<DTOSourceData> getAllChildrenOf(Long idP){
+        return relationsRepo.getAllChildrenByIDParinte(idP)
                 .stream()
-                .map(t->{
-                    return toDTO(t);
-                }).collect(Collectors.toList());
+                .map(t->
+                     toDTO(t)
+                ).collect(Collectors.toList());
     }
 
     public List<DTOSourceData> getAllParents() {
@@ -55,26 +56,33 @@ public class RelationsService {
             k = k + String.valueOf(level) + "-";
         }
 
-        tmp.setKey(k.substring(0, k.length() ));
+        tmp.setKey(k.substring(0, k.length()-1));
         return tmp;
     }
 
     public DTOSourceData toDTO(SourceData s) {
         DTOSourceData dt = new DTOSourceData(s,new ArrayList<>());
-//
-//
-        long idd=relationsRepo.getParinteByID(s.getIdSource()).get().getIdSource();
 
-        dt.setId_superior(idd);
-        dt.setQnt(0);
-        dt.setCustomFieldList(relationsRepo.getCustomFieldyID(s.getIdSource()));
+        Optional<SourceData> parinte=relationsRepo.getParinteByID(s.getIdSource());
+        long idParent=0L;
+        if(parinte.isPresent()){
+            idParent=relationsRepo.getParinteByID(s.getIdSource()).get().getIdSource();
+        }
+
+        dt.setId_superior(idParent);
+       // dt.setQnt(0);
+        dt.setCustomFieldList(relationsRepo.getCustomFieldByID(s.getIdSource()));
         return dt;
     }
 
-    public TreeNode getNodgetOrigin(long id){
-        SourceData data=relationsRepo.getParinteByID(id).get();
-        DTOSourceData dtoData=toDTO(data);
-        return toNode(dtoData,0);
+    public TreeNode getTreeOrigin(long idO){
+        Optional<SourceData> data=relationsRepo.getOrigin(idO);
+        if(data.isPresent()){
+            DTOSourceData dtoSourceData=toDTO(data.get());
+            return toNode(dtoSourceData,0);
+
+        }
+        return null;
 
 
     }
@@ -89,18 +97,52 @@ public class RelationsService {
         while (sw==true) {
             final int lv = lev + 1;
             List<TreeNode> tmp = new ArrayList<>();
-            for (TreeNode n : level
-            ) {
-                tmp = relationsRepo.getAllChildrenByIDParinte(n.getData().getIdSource())
-                        .stream()
-                        .map(t -> {
-                            return toNode(toDTO(t), lv);
 
-                        }).collect(Collectors.toList());
-                n.setChildren(tmp);
+//            level.stream().map(n->{
+//               List<DTOSourceData> nChildren=new ArrayList<>();
+//               nChildren=getAllChildrenOf(n.getData().getIdSource());
+//                if(nChildren.size()>0){
+//                    nChildren.stream().map(v->{
+//                       TreeNode nod=toNode(v,lv);
+//                       n.getChildren().add(nod);
+//                       tmp.add(nod);
+//                       return v;
+//                    });
+//                }
+//                return tmp;
+//            });
+            level.forEach(n->{
+               List<DTOSourceData> nChildren=new ArrayList<>();
+               nChildren=getAllChildrenOf(n.getData().getIdSource());
+               nChildren.forEach(c->{
+                       TreeNode nod=toNode(c,lv);
+                       n.getChildren().add(nod);
+                       tmp.add(nod);
+               });
+            });
+//            for (TreeNode n : level
+//            ) {
+//               List<DTOSourceData> nChildren=new ArrayList<>();
+//               nChildren=getAllChildrenOf(n.getData().getIdSource());
+//               if(nChildren.size()>0) {
+//                   for(int z=0;z<nChildren.size();z++){
+//                       TreeNode nod=toNode(nChildren.get(z),lv);
+//                       n.getChildren().add(nod);
+//                       tmp.add(nod);
+//                   }
+//
+//
+////                   nChildren.forEach((dtn)->{
+////                       TreeNode nod=toNode(dtn,lv);
+////                       n.getChildren().add(nod);
+////                       tmp.add(nod);
+////                   });
+//               }
+//
+//
+//            }
 
-            }
-            if (tmp.size() == 0) {
+            if (tmp.size() == 0||tmp==null) {
                 sw = false;
             } else {
 

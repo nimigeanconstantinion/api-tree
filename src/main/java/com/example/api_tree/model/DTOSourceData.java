@@ -28,7 +28,10 @@ public class DTOSourceData extends SourceData{
         this.setDescriere(source.getDescriere());
         this.setFel(source.getFel());
         this.setLabel(source.getLabel());
+        this.setQnt(source.getQnt());
         this.customFieldList=customFieldList;
-        //this.setId_superior(0L);
+    }
+    public String toString(){
+        return "Id superior="+this.getId_superior().toString()+"\n"+"Id Source="+this.getIdSource().toString();
     }
 }
