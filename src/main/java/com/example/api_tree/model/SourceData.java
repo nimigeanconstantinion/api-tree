@@ -27,8 +27,8 @@ public class SourceData implements Serializable {
     private double qnt;
 
     public boolean equals(Object o){
-
-        return this.getIdSource()==((SourceData) o).idSource;
+        SourceData sourceData=(SourceData) o;
+        return this.getLabel().equals(sourceData.getLabel());
     }
 
 }

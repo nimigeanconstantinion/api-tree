@@ -14,6 +14,7 @@ public class TreeNode {
 
     private String key;
     private String label;
+    private String icon="";
     private DTOSourceData data;
     private List<TreeNode> children=new ArrayList<>();
 }

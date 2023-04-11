@@ -52,11 +52,24 @@ public class RelationsService {
         tmp.setChildren(new ArrayList<>());
         tmp.setData(data);
         String k = "";
-        for (int i = 0; i <= level; i++) {
-            k = k + String.valueOf(level) + "-";
+       // for (int i = 0; i <= level; i++) {
+            k = String.valueOf(level) + "-"+String.valueOf(data.getIdSource());
+        //}
+
+        tmp.setKey(k);
+        if(level==0){
+            tmp.setIcon("pi pi-fw pi-circle-fill");
+
+        }
+        if(level==1){
+            tmp.setIcon("pi pi-fw pi-play");
+
+        }
+        if(level==2){
+            tmp.setIcon("pi pi-fw pi-arrows-h");
+
         }
 
-        tmp.setKey(k.substring(0, k.length()-1));
         return tmp;
     }
 
@@ -93,9 +106,10 @@ public class RelationsService {
         allLev.add(origin);
         level.add(origin);
         int lev = 0;
+        int lv=0;
         boolean sw = true;
         while (sw==true) {
-            final int lv = lev + 1;
+            ++lv;
             List<TreeNode> tmp = new ArrayList<>();
 
 //            level.stream().map(n->{
@@ -111,11 +125,12 @@ public class RelationsService {
 //                }
 //                return tmp;
 //            });
+            int finalLv = lv;
             level.forEach(n->{
                List<DTOSourceData> nChildren=new ArrayList<>();
                nChildren=getAllChildrenOf(n.getData().getIdSource());
                nChildren.forEach(c->{
-                       TreeNode nod=toNode(c,lv);
+                       TreeNode nod=toNode(c, finalLv);
                        n.getChildren().add(nod);
                        tmp.add(nod);
                });
@@ -154,6 +169,14 @@ public class RelationsService {
       return allLev;
     }
 
+    public DTOSourceData addRelation(long idParinte,SourceData copil){
+        Optional<SourceData> objCopil=relationsRepo.getChildByID(copil.getIdSource());
+        if(objCopil.isEmpty()){
 
+        }else{
+            return null;
+        }
+    return null;
+    }
 
 }
