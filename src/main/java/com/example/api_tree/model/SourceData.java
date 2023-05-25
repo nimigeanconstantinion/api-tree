@@ -15,7 +15,6 @@ import java.util.List;
 @SuperBuilder
 @Embeddable
 public class SourceData implements Serializable {
-
     private Long idSource;
 
     private String label;

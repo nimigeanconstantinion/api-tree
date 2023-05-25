@@ -25,5 +25,12 @@ public class CustomField{
     private Long parentId;
 
 
+    public boolean equals(Object e){
+        CustomField ee=(CustomField) e;
+        if(idOwner==ee.idOwner&&customKey.equals(ee.getCustomKey())){
+            return true;
+        }
+        return false;
+    }
 
 }

@@ -21,7 +21,7 @@ public interface RelationsRepo extends JpaRepository<Relatii,Long> {
     Optional<SourceData> getChildByID(Long idS);
 
     @Query(value = "select a.source1 from Relatii a where a.source1.idSource=?1")
-    Optional<SourceData> getOrigin(Long idR);
+    List<SourceData> getOrigin(Long idR);
 
     @Query(value = "select a from CustomField a where a.idOwner=?1")
     List<CustomField> getCustomFieldByID(Long idS);
@@ -32,7 +32,9 @@ public interface RelationsRepo extends JpaRepository<Relatii,Long> {
     @Query(value = "select a.source2 from Relatii a where a.source1.idSource=?1")
     List<SourceData> getAllChildrenByIDParinte(Long idP);
 
+    @Query(value = "select a.source2 from Relatii a where a.source2=?1")
+    Optional<SourceData> getSourceChild(SourceData sourceData);
 
-
-
+    @Query(value = "select a.source1 from Relatii a where a.source1=?1")
+    Optional<SourceData> getSourceParent(SourceData sourceData);
 }

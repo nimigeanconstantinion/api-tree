@@ -34,10 +34,10 @@ public class RelationController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/getChildren/{idP}")
     public List<TreeNode> getChildren(@PathVariable long idP){
-        List<TreeNode> lista=relationsService.getAllChildrenOf(idP)
+        List<TreeNode> lista=relationsRepo.getAllChildrenByIDParinte(idP)
                 .stream()
                 .map(t->{
-                    return relationsService.toNode(t,1);
+                    return relationsService.toNode(relationsService.toDTO(t), 1);
                 }).collect(Collectors.toList());
 
        return lista;
@@ -57,7 +57,26 @@ public class RelationController {
     @GetMapping("/test")
     public List<SourceData> getTest() {
 
-        return relationsRepo.getAllChildrenByIDParinte(2L);
+        return relationsRepo.getAllChildrenByIDParinte(0L);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping ("/addSource")
+    public DTOSourceData addTest(@RequestBody DTOSourceData data) {
+        SourceData sursa=new SourceData();
+        sursa.setIdSource(data.getIdSource());
+        sursa.setDescriere(data.getDescriere());
+        sursa.setLabel(data.getLabel());
+        sursa.setQnt(data.getQnt());
+        sursa.setFel(data.getFel());
+        DTOSourceData retur=relationsService.addRelation(data.getId_superior(),sursa,data.getCustomFieldList());
+
+        if(retur!=null){
+            return retur;
+        }
+
+        return null;
+
     }
+
+}

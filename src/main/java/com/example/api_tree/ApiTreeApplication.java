@@ -29,7 +29,7 @@ public class ApiTreeApplication {
 //			s1.setFel("R");
 //			s1.setQnt(100.00);
 //			s1.setLabel("Label ROOT");
-//
+////
 //			SourceData s2=new SourceData();
 //			s2.setIdSource(1L);
 //			s2.setDescriere("Copil 01");
@@ -41,54 +41,54 @@ public class ApiTreeApplication {
 //			r.setSource2(s2);
 //			r.setRelationType("parinte-copil");
 //			List<CustomField> listaF=new ArrayList<CustomField>();
-//			CustomField f1=new CustomField();
-//			f1.setIdOwner(0L);
-//			f1.setCustomKey("pnume");
-//			f1.setType("string");
-//			f1.setValue("Numele ROOT");
-//			listaF.add(f1);
+////			CustomField f1=new CustomField();
+////			f1.setIdOwner(0L);
+////			f1.setCustomKey("pnume");
+////			f1.setType("string");
+////			f1.setValue("Numele ROOT");
+////			listaF.add(f1);
 //			CustomField f2=new CustomField();
-//			f2.setIdOwner(1L);
+//			f2.setIdOwner(3L);
 //			f2.setCustomKey("camp_copil");
 //			f2.setType("string");
-//			f2.setValue("Campul copilului 2kldskls ");
+//			f2.setValue("copilul 33 NEW ");
 //			listaF.add(f2);
 //			r.setCustomFieldList(listaF);
 //			relationsRepo.save(r);
-//
-////-----------------------------\
-//			SourceData s3=new SourceData();
-//			s3.setIdSource(1L);
-//
-//			s3.setDescriere("Copil 01");
-//			s3.setFel("C");
-//			s3.setQnt(7.00);
-//			s3.setLabel("Label01 de copil");
-//
-//			SourceData s4=new SourceData();
-//			s4.setIdSource(2L);
-//			s4.setDescriere("Copil 01");
-//			s4.setFel("C");
-//			s4.setQnt(7.00);
-//			s4.setLabel("Label01 de copil");
-//			Relatii rr=new Relatii();
-//			rr.setSource1(s3);
-//			rr.setSource2(s4);
-//			rr.setRelationType("parinte-copil");
-//
-//			List<CustomField> listaFF=new ArrayList<CustomField>();
-//
-//			CustomField f=new CustomField();
-//			f.setIdOwner(2L);
-//			f.setCustomKey("camp_copil");
-//			f.setType("string");
-//			f.setValue("Campul 1.1");
-//			listaFF.add(f);
-//			rr.setCustomFieldList(listaFF);
-//			relationsRepo.save(rr);
-//
-//
-//
+////
+//////-----------------------------\
+////			SourceData s3=new SourceData();
+////			s3.setIdSource(1L);
+////
+////			s3.setDescriere("Copil 01");
+////			s3.setFel("C");
+////			s3.setQnt(7.00);
+////			s3.setLabel("Label01 de copil");
+////
+////			SourceData s4=new SourceData();
+////			s4.setIdSource(2L);
+////			s4.setDescriere("Copil 01");
+////			s4.setFel("C");
+////			s4.setQnt(7.00);
+////			s4.setLabel("Label01 de copil");
+////			Relatii rr=new Relatii();
+////			rr.setSource1(s3);
+////			rr.setSource2(s4);
+////			rr.setRelationType("parinte-copil");
+////
+////			List<CustomField> listaFF=new ArrayList<CustomField>();
+////
+////			CustomField f=new CustomField();
+////			f.setIdOwner(2L);
+////			f.setCustomKey("camp_copil");
+////			f.setType("string");
+////			f.setValue("Campul 1.1");
+////			listaFF.add(f);
+////			rr.setCustomFieldList(listaFF);
+////			relationsRepo.save(rr);
+////
+////
+////
 //		};
 //	}
 }

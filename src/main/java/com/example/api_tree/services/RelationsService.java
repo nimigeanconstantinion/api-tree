@@ -88,10 +88,18 @@ public class RelationsService {
         return dt;
     }
 
+    public SourceData getSourceChildById(long id){
+        Optional<SourceData> sp=relationsRepo.getChildByID(id);
+        if(sp.isPresent()){
+            return sp.get();
+        }
+        return null;
+    }
+
     public TreeNode getTreeOrigin(long idO){
-        Optional<SourceData> data=relationsRepo.getOrigin(idO);
-        if(data.isPresent()){
-            DTOSourceData dtoSourceData=toDTO(data.get());
+        List<SourceData> data=relationsRepo.getOrigin(idO);
+        if(data.size()>0){
+            DTOSourceData dtoSourceData=toDTO(data.get(0));
             return toNode(dtoSourceData,0);
 
         }
@@ -112,19 +120,7 @@ public class RelationsService {
             ++lv;
             List<TreeNode> tmp = new ArrayList<>();
 
-//            level.stream().map(n->{
-//               List<DTOSourceData> nChildren=new ArrayList<>();
-//               nChildren=getAllChildrenOf(n.getData().getIdSource());
-//                if(nChildren.size()>0){
-//                    nChildren.stream().map(v->{
-//                       TreeNode nod=toNode(v,lv);
-//                       n.getChildren().add(nod);
-//                       tmp.add(nod);
-//                       return v;
-//                    });
-//                }
-//                return tmp;
-//            });
+
             int finalLv = lv;
             level.forEach(n->{
                List<DTOSourceData> nChildren=new ArrayList<>();
@@ -169,14 +165,40 @@ public class RelationsService {
       return allLev;
     }
 
-    public DTOSourceData addRelation(long idParinte,SourceData copil){
-        Optional<SourceData> objCopil=relationsRepo.getChildByID(copil.getIdSource());
-        if(objCopil.isEmpty()){
+    public void sincronizeFields(long ownerId,List<CustomField> campuri){
+        List<CustomField> original=customFieldsRepo.getCustomFieldById(ownerId);
+        customFieldsRepo.deleteAll(original.stream().filter(f->{
+            return campuri.stream().filter(p->p.getId()==f.getId()).count()==0;
+        }).collect(Collectors.toList()));
 
+        customFieldsRepo.saveAll(campuri);
+    }
+
+    public DTOSourceData addRelation(long idParinte,SourceData copil,List<CustomField> campuri){
+        Optional<SourceData> objCopil=relationsRepo.getChildByID(copil.getIdSource());
+        Optional<SourceData> objParinte=relationsRepo.getParinteByID(idParinte);
+
+        if(objCopil.isEmpty()&&objParinte.isPresent()){
+            Relatii newR=new Relatii();
+
+            newR.setSource2(copil);
+            newR.setSource1(objParinte.get());
+            newR.setCustomFieldList(campuri);
+
+            relationsRepo.save(newR);
+            Optional<SourceData> savedS=relationsRepo.getSourceChild(copil);
+            if(savedS.isPresent()){
+                copil.setIdSource(savedS.get().getIdSource());
+                sincronizeFields(savedS.get().getIdSource(),campuri);
+                return toDTO(copil);
+            }
+            return null;
         }else{
             return null;
         }
-    return null;
+    //return null;
     }
+
+
 
 }
