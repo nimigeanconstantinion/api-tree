@@ -27,7 +27,6 @@ public class Relatii implements Serializable {
     @Embedded
     @AttributeOverride(name = "idSource",column = @Column(name = "id_parinte"))
     @AttributeOverride(name = "idOwner",column = @Column(name = "parinte_id"))
-
     @AttributeOverride(name = "label",column = @Column(name = "label_parinte"))
     @AttributeOverride(name = "descriere",column = @Column(name = "descriere_parinte"))
     @AttributeOverride(name = "fel",column = @Column(name = "fel_parinte"))

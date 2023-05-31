@@ -166,27 +166,31 @@ public class RelationsService {
     }
 
     public void sincronizeFields(long ownerId,List<CustomField> campuri){
-        List<CustomField> original=customFieldsRepo.getCustomFieldById(ownerId);
-        customFieldsRepo.deleteAll(original.stream().filter(f->{
-            return campuri.stream().filter(p->p.getId()==f.getId()).count()==0;
-        }).collect(Collectors.toList()));
+        List<CustomField> original=customFieldsRepo.getFieldsByIdOwner(ownerId);
+
+        if(original.size()>0){
+            customFieldsRepo.deleteAll(original.stream().filter(f->{
+                return campuri.stream().filter(p->p.getId()==f.getId()).count()==0;
+            }).collect(Collectors.toList()));
+        }
+        System.out.println("Here");
+        System.out.println(campuri);
 
         customFieldsRepo.saveAll(campuri);
     }
 
     public DTOSourceData addRelation(long idParinte,SourceData copil,List<CustomField> campuri){
-        Optional<SourceData> objCopil=relationsRepo.getChildByID(copil.getIdSource());
-        Optional<SourceData> objParinte=relationsRepo.getParinteByID(idParinte);
+        Optional<SourceData> objCopil=relationsRepo.getSourceChild(copil.getLabel());
+        List<SourceData> objParinte=relationsRepo.getSourceParentByID(idParinte);
 
-        if(objCopil.isEmpty()&&objParinte.isPresent()){
+        if(objCopil.isEmpty()&&objParinte.size()>0){
             Relatii newR=new Relatii();
-
             newR.setSource2(copil);
-            newR.setSource1(objParinte.get());
-            newR.setCustomFieldList(campuri);
+            newR.setSource1(objParinte.get(0));
+            newR.setCustomFieldList(new ArrayList<>());
 
             relationsRepo.save(newR);
-            Optional<SourceData> savedS=relationsRepo.getSourceChild(copil);
+            Optional<SourceData> savedS=relationsRepo.getSourceChild(copil.getLabel());
             if(savedS.isPresent()){
                 copil.setIdSource(savedS.get().getIdSource());
                 sincronizeFields(savedS.get().getIdSource(),campuri);

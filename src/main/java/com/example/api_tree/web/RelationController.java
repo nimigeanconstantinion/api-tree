@@ -61,7 +61,7 @@ public class RelationController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping ("/addSource")
+    @PostMapping ("/addRelation")
     public DTOSourceData addTest(@RequestBody DTOSourceData data) {
         SourceData sursa=new SourceData();
         sursa.setIdSource(data.getIdSource());
@@ -76,6 +76,7 @@ public class RelationController {
         }
 
         return null;
+
 
     }
 

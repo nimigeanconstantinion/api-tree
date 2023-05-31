@@ -1,6 +1,7 @@
 package com.example.api_tree.repository;
 
 import com.example.api_tree.ApiTreeApplication;
+import com.example.api_tree.model.SourceData;
 import com.example.api_tree.services.RelationsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +24,17 @@ class RelationsRepoTest {
     RelationsService relationsService;
     @Test
     void getAllChildrenByIDParinteTest() {
-        System.out.println(relationsService.getAllChildrenOf(0L).stream().map(c->c.toString()).collect(Collectors.toList()));
+
+    }
+
+    @Test
+    void findAllBySource2() {
+        SourceData s=new SourceData();
+        s.setLabel("Label01 de copil");
+        SourceData s2=new SourceData();
+        s2.setLabel("Label01 de copil");
+        System.out.println(s.equals(s2));
+        System.out.println(relationsRepo.findAllBySource2(s.getLabel()).size());
+
     }
 }

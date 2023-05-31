@@ -21,13 +21,19 @@ public class SourceData implements Serializable {
 
     private String descriere;
 
-    private String fel;
-
     private double qnt;
+
+    private String fel;
 
     public boolean equals(Object o){
         SourceData sourceData=(SourceData) o;
         return this.getLabel().equals(sourceData.getLabel());
     }
+
+    public String toString(){
+        return "Id Source="+String.valueOf(idSource)+", Label="+label+", Descriere="+descriere;
+    }
+
+    
 
 }
