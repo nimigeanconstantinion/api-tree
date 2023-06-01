@@ -2,35 +2,41 @@ package com.example.api_tree.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name="CustomField")
-@Table(name="custom_field")
-public class CustomField{
-    @Id
-    @SequenceGenerator(name = "cfields_sequence",sequenceName = "cfields_sequence",allocationSize = 1)
-    @GeneratedValue(generator = "cfields_sequence")
-    private Long id;
+@Entity(name = "CustomField")
+@Table(name = "customfield")
 
-    Long idOwner;
+public class CustomField {
+    @Id
+    @GeneratedValue(generator = "string_sequence")
+    @GenericGenerator(
+            name = "string_sequence",
+            strategy = "com.example.api_tree.system.StringSequenceGenerator"
+    )
+    @Column(name = "id")
+    private String id;
+
     String customKey;
     String value;
     String type;
 
-    @Column(name = "parent_id")
-    private Long parentId;
-
 
     public boolean equals(Object e){
         CustomField ee=(CustomField) e;
-        if(idOwner==ee.idOwner&&customKey.equals(ee.getCustomKey())){
+        if(id==ee.id&&customKey.equals(ee.getCustomKey())){
             return true;
         }
         return false;
     }
+
+    @Column(name = "parent_rid", length = 50)
+    private String parentRid;
+
 
 }
