@@ -1,5 +1,7 @@
 package com.example.api_tree.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -15,11 +17,24 @@ import java.util.List;
 @Table(name="node")
 public class Node {
     @Id
-    @GeneratedValue(generator = "string_sequence")
+//    @SequenceGenerator(
+//            name="pers_sequence",
+//            sequenceName = "pers_sequence",
+//            allocationSize = 1
+//
+//    )
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "pers_sequence"
+//    )
+
     @GenericGenerator(
             name = "string_sequence",
             strategy = "com.example.api_tree.system.StringSequenceGenerator"
     )
+    @GeneratedValue(generator = "string_sequence"
+    )
+
     @Column(name = "id")
     private String id;
     private String label;
@@ -33,8 +48,10 @@ public class Node {
     @JoinColumn(name = "parinte_id")
     private Node parinte;
 
-    @OneToMany(mappedBy = "parinte", orphanRemoval = true, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "id", orphanRemoval = true, cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Node> subordinates = new ArrayList<>();
+
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_rid")
@@ -43,6 +60,7 @@ public class Node {
 
 
     public void addCustomField(CustomField field){
+        field.setParentRid(this.id);
         this.cfields.add(field);
     }
 
@@ -50,6 +68,11 @@ public class Node {
     public void addSubordonate(Node subordonate){
         subordonate.setParinte(this);
         this.subordinates.add(subordonate);
+    }
+
+    public void removeSubordonate(Node subordonate){
+
+        this.subordinates.remove(subordonate);
     }
 
 }
