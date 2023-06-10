@@ -88,4 +88,30 @@ public class NodeController {
 
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/root/{idR}")
+    public Node getRoot(@PathVariable String idR){
+
+        return nodeRepository.findById(idR).get();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/addRoot")
+    public void addRoot(@RequestBody Node root){
+
+            nodeRepository.saveAndFlush(root);
+
+
+    }
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/addchild/{idP}")
+    public void addChild(@PathVariable String idP,@RequestBody Node child){
+
+        treeService.addChildTest(idP, child);
+
+
+    }
+
+
+
 }

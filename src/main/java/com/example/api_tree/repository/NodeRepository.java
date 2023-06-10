@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,4 +19,9 @@ public interface NodeRepository extends JpaRepository<Node,String> {
 
     @Query(value = "select n from Node n where n.label=?1")
     Optional<Node> findNodeByLabel(String s);
+
+    @Query(value = "select n from Node n where n.parinte=?1")
+    List<Node> getSubordinatesByParentId(String id);
+
+
 }

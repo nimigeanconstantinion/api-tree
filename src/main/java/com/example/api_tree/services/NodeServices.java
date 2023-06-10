@@ -71,4 +71,10 @@ public class NodeServices {
 
         return customFieldRepository.getCustomFieldsByParentRid(idN);
     }
+
+    public void addChildTest(String idP, Node child) {
+        Node parinte=nodeRepository.findById(idP).get();
+        parinte.addSubordonate(child);
+        nodeRepository.saveAndFlush(parinte);
+    }
 }

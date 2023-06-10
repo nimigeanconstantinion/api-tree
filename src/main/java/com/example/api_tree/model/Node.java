@@ -1,7 +1,6 @@
 package com.example.api_tree.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -15,6 +14,7 @@ import java.util.List;
 @Builder
 @Entity(name = "Node")
 @Table(name="node")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Node {
     @Id
 //    @SequenceGenerator(
@@ -46,10 +46,11 @@ public class Node {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "parinte_id")
+    @JsonBackReference
     private Node parinte;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "id", orphanRemoval = true, cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonIgnore
     private List<Node> subordinates = new ArrayList<>();
 
 
