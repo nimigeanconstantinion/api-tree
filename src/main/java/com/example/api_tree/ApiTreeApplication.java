@@ -1,5 +1,6 @@
 package com.example.api_tree;
 
+import com.example.api_tree.generator.service.SerialService;
 import com.example.api_tree.model.Node;
 import com.example.api_tree.repository.NodeRepository;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,10 @@ public class ApiTreeApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ApiTreeApplication.class, args);
 	}
-
+	@Bean
+	public SerialService myBean(){
+		return new SerialService();
+	}
 
 
 //
